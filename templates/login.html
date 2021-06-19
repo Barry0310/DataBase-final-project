@@ -53,8 +53,8 @@
          let res;
          xhr.onload = function() {
             res = JSON.parse(xhr.responseText); 
-            if (res["stats"]=="SUCCESS") { window.location="../"; done=1; } 
-            if (done==0) { alert("帳號或密碼錯誤時出現的訊息"); } 
+            if (res["stats"]=="SUCCESS") { localStorage.setItem("user_id",res["userID"]) ;window.location="../"; done=1; }
+            if (done==0) { alert(res["userID"]); } 
          }
       } 
       </script>

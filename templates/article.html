@@ -32,9 +32,16 @@
 					tar.innerHTML = res.post_time;
 					tar = document.getElementById("article_content");
 					tar.innerHTML = res.content;
+					//編輯鈕
+					var user_id = localStorage.getItem("user_id");
+					if(user_id && user_id==res.userID)
+					{
+						tar = document.getElementById("edit_button");
+						tar.innerHTML = "<button>編輯文章</button>";
+					}
 					//留言部分
 					var num_comment = res.comment.length;
-					tar = document.getElementById("commets");
+					tar = document.getElementById("comments");
 					var data="";
 					for(i=0;i<num_comment;++i)
 					{
@@ -51,6 +58,12 @@
 			
 			function Comment()
 			{
+				var user_id = localStorage.getItem("user_id");	
+				if(!user_id)	//檢查登入
+				{
+					alert("請先登入!");
+					return;
+				}
 				var req=new XMLHttpRequest();
 				req.open("post","");	//伺服器
 				req.onload = function()
@@ -79,13 +92,25 @@
 				}
 				reqAddComment["action"] = "ADD_COMMENT";
 				reqAddComment["article_num"] = serial_num;
-				reqAddComment["userID"] = "";	//TODO
+				reqAddComment["userID"] = user_id;	//TODO
 				reqAddComment["content"] = document.getElementById("input_content").value;
 				var myRequest = JSON.stringify(reqAddComment);
 				req.send(myRequest);
-				
 				getData();
+				window.location.reload();
 			}
+			
+			function Logout()
+			{
+				localStorage.removeItem("user_id");
+				window.location.reload();
+			}
+			
+			function goEdit()
+			{
+				window.location.href="edit/";
+			}
+			
 		</script>
 	</head>
 	<body>
@@ -96,13 +121,40 @@
 				T4 Platform</a>
 			<p></p>
 			<a id="user_id" href="../../../login">尚未登入</a>
+			<h3 id="hi"></h3>
+			<div id="logout_button" onclick="Logout();"></div>
 		</div>
+		<script>
+			//localStorage.setItem("user_id","abc123");		//localStorage測試
+			//localStorage.removeItem("user_id");
+			var user_id = localStorage.getItem("user_id");
+			//alert(user_id);
+			if(user_id)
+			{
+				var tar = document.getElementById("user_id");
+				tar.innerHTML = "";
+				tar = document.getElementById("hi");
+				tar.innerHTML = "Hi! " + user_id;
+				tar = document.getElementById("logout_button");
+				tar.innerHTML = "<button>登出</button>";
+			}
+		</script>
 		<p></p>
 		<div id="title" style="background-color: powderblue;">
 			<p>標題：<span id="article_title"></span></p>
 			<p>作者：<span id="article_author"></span></p>
 			<p>發文時間：<span id="article_time"></span></p>
 		</div>
+		<div id="edit_button" onclick="goEdit();"></div>
+		<!--<script>
+			var user_id = localStorage.getItem("user_id");
+			var author = document.getElementById("article_author").innerHTML;
+			if(user_id && user_id===author)//TODO
+			{
+				var tar = document.getElementById("edit_button");
+				tar.innerHTML = "<button>編輯文章</button>";
+			}
+		</script>-->
 		<p></p>
 		<div id="content_block" style="background-color: powderblue;">
 			<p id="article_content">內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文
@@ -114,7 +166,7 @@
 		<p></p>
 		<button onclick="Comment();">我要留言</button>
 		<p></p>
-		<div id="commets" style="background-color: powderblue;"> 留言*n</div>
+		<div id="comments" style="background-color: powderblue;"> 留言*n</div>
 		<script>getData();</script>
 	</body>
 </html>

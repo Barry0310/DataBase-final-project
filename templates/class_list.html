@@ -19,7 +19,7 @@
 					for(i=0;i<num_class;++i)
 					{
 						data += "<a style=\"font-size:x-large; color:black; text-decoration:none;\" href=\""
-							+ res.name[i] +"/\">"+res.name[i] + "</a>" + "<p></p>";	//文章連結
+							+ res.name[i] +"/\">"+res.name[i] + "</a>" + "<p></p>";	//分類連結
 					}
 					tar.innerHTML = data;
 				}
@@ -29,6 +29,12 @@
 				var myRequest = JSON.stringify(reqClassList);
 				//alert(myRequest);
 				req.send(myRequest);
+			}
+			
+			function Logout()
+			{
+				localStorage.removeItem("user_id");
+				window.location.reload();
 			}
 
 		</script>
@@ -41,7 +47,24 @@
 				T4 Platform</a>
 			<p></p>
 			<a id="user_id" href="../../login/">尚未登入</a>
+			<h3 id="hi"></h3>
+			<div id="logout_button" onclick="Logout();"></div>
 		</div>
+		<script>
+			//localStorage.setItem("user_id","abc123");		//localStorage測試
+			//localStorage.removeItem("user_id");
+			var user_id = localStorage.getItem("user_id");
+			//alert(user_id);
+			if(user_id)
+			{
+				var tar = document.getElementById("user_id");
+				tar.innerHTML = "";
+				tar = document.getElementById("hi");
+				tar.innerHTML = "Hi! " + user_id;
+				tar = document.getElementById("logout_button");
+				tar.innerHTML = "<button>登出</button>";
+			}
+		</script>
 		<p></p>
 		<h1 style="background-color: powderblue;">選擇看板</h1>
 		<p></p>

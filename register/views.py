@@ -14,6 +14,7 @@ def UserRegister(request):
         password = '\'{password}\''.format(password=request['password'])
         name = '\'{name}\''.format(name=request['name'])
         gender = '\'{gender}\''.format(gender=request['gender'])
+        print(request['education'])
         education = '\'{education}\''.format(education=request['education'])
         cursor.execute(
             'insert into user values({ID}, {password}, {name}, {gender}, {education}, {create_time}, 0)'.format(

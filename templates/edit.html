@@ -29,13 +29,15 @@ topBar{
 </head>
 <body>
 <topBar>
-<a href="url">首頁</a>
+    <a href="/">首頁</a>
 </topBar>
 <form action="" method="post" >
   <div align="left" style="background-color:cyan;padding:10px;margin-bottom:5px;">
     <br>
     <label for="class_name">分類:</label>
-    <input type="text" name="class_name" id="class_name" required autofocus />
+    <select name="class_name" id="class_name" size=0 required autofocus >
+	  
+	</select>
     <br>  
     <br> 
   <label for="article_title">文章標題:</label>
@@ -56,20 +58,48 @@ window.onload = function() {
   // 填入url -- TODO
   let url = "";
   //----------------//
+  // 拿到分類
+  let get_list = {}; // 建立JSON Object
+  get_list["action"] = "GET_CLASS_LIST";
+  let data_c = JSON.stringify(get_list); // 將JSON轉為字串格式
+  // alert(data_c);
+  let xhr = new XMLHttpRequest(); // 建立xhr物件
+  xhr.open('post', url, true);
+  xhr.send(data_c);
+  xhr.onload = function() {
+    // 取得 xhr的回應後，顯示註冊是否成功資訊
+    let tmp_1 = JSON.parse(xhr.responseText);
+    let class_list = document.getElementById('class_name');
+	let len = tmp_1["name"].length;
+	for (let i = 0; i < len; i++){
+	  class_list.options[i]= new Option(tmp_1["name"][i], tmp_1["name"][i]);
+	}
+	class_list.selectedIndex = 0;
+  }
+
+
+
   
   // 先拿到文章資訊
   let req = {}; // 建立JSON Object
   req["action"] = "GET_ARTICLE_DATA";
-  req["serial_num"] = 123;
   let data_a = JSON.stringify(req);
   // alert(data_a);
-  let xhr = new XMLHttpRequest(); // 建立xhr物件
-  xhr.open('post', url, true);
-  xhr.send(data_a); // 送出請求
+  let xhr2 = new XMLHttpRequest(); // 建立xhr物件
+  xhr2.open('post', url, true);
+  xhr2.send(data_a); // 送出請求
   let res;
-  xhr.onload = function() {
-    res = JSON.parse(xhr.responseText); // 接收回應
+  let class_name = document.getElementById('class_name');
+  let article_title = document.getElementById('article_title');
+  let article_content = document.getElementById('article_content');
+  xhr2.onload = function() {
+    res = JSON.parse(xhr2.responseText); // 接收回應
+      class_name.value = res["class_name"];
+  article_title.value = res["title"];
+  article_content.value = res["content"];
   }
+
+
   // alert(res);
   // 等用戶按下送出
   let submit = document.getElementById('submit');
@@ -77,24 +107,30 @@ window.onload = function() {
   // 送出
   function signup() {
     // 更改輸入內容
-    res["class_name"] = document.getElementById('class_name').value;
-	res["title"] = document.getElementById('article_title').value;
-	res["content"] = document.getElementById('article_content').value;
-    let data_b = JSON.stringify(res); // 將JSON轉為字串格式
+      let rew = {}; // 建立JSON Object
+    rew["action"] = "ADD_ARTICLE";
+	rew["userID"] = localStorage.getItem("user_id"); // TODO
+    rew["class_name"] = class_name.value;
+	rew["title"] = article_title.value;
+	rew["content"] = article_content.value;
+    let data_b = JSON.stringify(rew); // 將JSON轉為字串格式
     // alert(data_b);
+      xhr.open('post', url, true);
 	xhr.send(data_b);
     xhr.onload = function() {
     // 取得 xhr的回應後，顯示註冊是否成功資訊
       let tmp = JSON.parse(xhr.responseText);
-	  let verify = "Yes";
-    }
-	// alert(tmp);
-    if(verify == "Yes") {
+      if(tmp['stats'] == "SUCCESS") {
       alert('修改成功');
+	  window.location.href = '../';
     }
 	else {
       alert('修改失敗');
+	  window.location.reload();
     }
+    }
+	// alert(tmp);
+
   }
 }
 </script>

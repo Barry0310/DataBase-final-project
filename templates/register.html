@@ -43,7 +43,7 @@
             var password=document.register.password.value; 
             var name=document.register.name.value; 
             var gender = document.register.gender.value; 
-            var education=document.register.value; 
+            var education=document.register.education.value; 
             var req = {};
             req["action"] = "REGISTER";
             req["userID"] = userID;
@@ -58,7 +58,7 @@
             let res;
             xhr.onload = function() {
                res = JSON.parse(xhr.responseText); 
-               if (res["stats"]=="SUCCESS") { window.location="index.html"; done=1; }                   if (done==0) { alert("帳號或密碼錯誤時出現的訊息"); } 
+               if (res["stats"]=="SUCCESS") { window.location="../"; done=1; }                   if (done==0) { alert("帳號或密碼錯誤時出現的訊息"); } 
                if (done==0) { alert("註冊失敗"); } 
             }
             } 

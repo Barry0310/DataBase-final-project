@@ -54,6 +54,35 @@
             visibility: hidden;
         }
     </style>
+    <script> 
+        function Logout(){
+                localStorage.removeItem('user_id');
+        
+                window.location.href=window.location.href;
+                window.location.reload;
+
+            }
+    </script> 
+    <script type="text/javascript">
+        window.onload=function(){
+
+                if(localStorage.getItem("user_id")!== null)
+                {
+                    document.getElementById("1").innerText= "登出";
+                    document.getElementById("1").href = "javascript:Logout()";
+                    document.getElementById("2").innerText= "個人資訊";
+                    document.getElementById("2").href = "personal/";
+                    //使用者
+                }else
+                {
+                    document.getElementById("1").innerText= "使用者登入"
+                    document.getElementById("1").href = "login/"
+                    document.getElementById("2").innerText= "使用者註冊"
+                    document.getElementById("2").href = "register/"
+                    //訪客
+                }
+        }
+        </script>
    </head> 
 
    <body> 
@@ -63,10 +92,10 @@
         </div>
         <div class="wrapper clearfix">
             <div class="section3">
-                <a href="register/">使用者註冊</a>
+                <a id="1"></a>
             </div> 
             <div class="section2">
-                <a href="login/">使用者登入</a>
+                <a id="2"></a>
             </div>           
             <div class="section1">
                 <a href="class/">分類看板</a>

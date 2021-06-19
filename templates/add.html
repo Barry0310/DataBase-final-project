@@ -35,7 +35,9 @@ topBar{
   <div align="left" style="background-color:cyan;padding:10px;margin-bottom:5px;">
     <br>
     <label for="class_name">分類:</label>
-    <input type="text" name="class_name" id="class_name" required autofocus />
+    <select name="class_name" id="class_name" size=0 required autofocus >
+	  
+	</select>
     <br>  
     <br> 
   <label for="article_title">文章標題:</label>
@@ -52,39 +54,63 @@ topBar{
 </body>
 <script type="text/javascript" >
 window.onload = function() {
+  // 填入url -- TODO
+  let url = '';  // TODO
+  //-----------------------//
+  // 拿到分類
+  let get_list = {}; // 建立JSON Object
+  get_list["action"] = "GET_CLASS_LIST";
+  let data_c = JSON.stringify(get_list); // 將JSON轉為字串格式
+  // alert(data_c);
+  let xhr = new XMLHttpRequest(); // 建立xhr物件
+  xhr.open('post', url, true);
+  xhr.send(data_c);
+  let tmp_1;
+  xhr.onload = function() {
+    // 取得 xhr的回應後，顯示註冊是否成功資訊
+    tmp_1 = JSON.parse(xhr.responseText);
+    console.log(tmp_1);
+    let class_list = document.getElementById('class_name');
+	let len = tmp_1.name.length;
+	for (let i = 0; i < len; i++){
+	  class_list.options[i]= new Option(tmp_1.name[i], tmp_1.name[i]);
+	}
+	class_list.selectedIndex = 0;
+  }
+  console.log(tmp_1);
 
   // 等用戶按下送出
   let submit = document.getElementById('submit');
   submit.addEventListener('click', signup); //監聽按鈕事件
-  // 送出
-  // 填入url -- TODO
-  let url = '';  // TODO
-  //-----------------------//
+  // 送出  
   
   function signup() {
     // 更改輸入內容
 	let req = {}; // 建立JSON Object
     req["action"] = "ADD_ARTICLE";
     req["class_name"] = document.getElementById('class_name').value;
-	req["userID"] = "AAA"; // TODO
+	req["userID"] = localStorage.getItem("user_id"); // TODO
 	req["title"] = document.getElementById('article_title').value;
 	req["content"] = document.getElementById('article_content').value;
     let data_a = JSON.stringify(req); // 將JSON轉為字串格式
 	// alert(data_a);
-	let xhr = new XMLHttpRequest(); // 建立xhr物件
+	// let xhr = new XMLHttpRequest(); // 建立xhr物件
     xhr.open('post', url, true);
     xhr.send(data_a);
     xhr.onload = function() {
     // 取得 xhr的回應後，顯示註冊是否成功資訊
       let tmp = JSON.parse(xhr.responseText);
-    }
-	// alert(tmp);
-    if(tmp['stats'] == "SUCCESS") {
+      if(tmp['stats'] == "SUCCESS") {
       alert('新增成功');
+	  window.location.href = '../' + tmp["serial_num"] + '/';
     }
 	else {
       alert('新增失敗');
+	  window.location.reload();
     }
+    }
+	// alert(tmp);
+
   }
 }
 </script>

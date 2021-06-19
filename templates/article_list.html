@@ -46,7 +46,8 @@
 					var data = "";
 					for(i=0;i<num_articles;++i)
 					{
-						data += "<a href=\"../../article/"+ res.article[i].serial_num +"\">"+res.article[i].title + "</a>" + "<p></p>"	<!--文章連結-->
+						data += "<a style=\"color:black; text-decoration:none;\" href=\"../../article/"
+							+ res.article[i].serial_num +"\">"+res.article[i].title + "</a>" + "<p></p>"	<!--文章連結-->
 					}
 					tar.innerHTML = data;
 					//分類
@@ -71,12 +72,22 @@
 				//alert(myRequest);
 				req.send(myRequest);
 			}
-
-			
-			
+	
 			function goPost()
 			{
+				var user_id = localStorage.getItem("user_id");
+				if(!user_id)
+				{
+					alert("請先登入!");
+					return;
+				}
 				window.location.href="../../article/post/";
+			}	
+
+			function Logout()
+			{
+				localStorage.removeItem("user_id");
+				window.location.reload();
 			}
 			
 		</script>
@@ -89,7 +100,24 @@
 				T4 Platform</a>
 			<p></p>
 			<a id="user_id" href="../../login/">尚未登入</a>
+			<h3 id="hi"></h3>
+			<div id="logout_button" onclick="Logout()";></div>
 		</div>
+		<script>
+			//localStorage.setItem("user_id","abc123");		//localStorage測試
+			//localStorage.removeItem("user_id");
+			var user_id = localStorage.getItem("user_id");
+			//alert(user_id);
+			if(user_id)
+			{
+				var tar = document.getElementById("user_id");
+				tar.innerHTML = "";
+				tar = document.getElementById("hi");
+				tar.innerHTML = "Hi! " + user_id;
+				tar = document.getElementById("logout_button");
+				tar.innerHTML = "<button>登出</button>";
+			}
+		</script>
 		<p></p>
 		<div id="classification" style="background-color: powderblue;">
 			<h2 id="class_name">/*看板分類*/</h2>

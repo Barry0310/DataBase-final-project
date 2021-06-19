@@ -6,7 +6,7 @@ from django.db import connection
 def LoginCheck(request):
     cursor = connection.cursor()
     ID = '\'{ID}\''.format(ID=request['userID'])
-    cursor.execute('select passward from user where ID={ID}'.format(ID=ID))
+    cursor.execute('select password from user where ID={ID}'.format(ID=ID))
     appl = cursor.fetchall()
     useID = request['userID']
     stats = 'SUCCESS'

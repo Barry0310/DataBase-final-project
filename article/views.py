@@ -21,7 +21,7 @@ def ArticleData(request, num):
     cursor.execute('select * from comment where article_num={serial_num}'.format(serial_num=num))
     appl = cursor.fetchall()
     for i in appl:
-        send_json['comment'].append({'userID': i[1], 'comment_time': i[4], 'content': i[5]})
+        send_json['comment'].append({'userID': i[1], 'comment_time': i[3], 'content': i[4]})
     return send_json
 
 def AddComment(request, num):
@@ -32,7 +32,7 @@ def AddComment(request, num):
     userID = '\'{userID}\''.format(userID=request['userID'])
     content = '\'{content}\''.format(content=request['content'])
     cursor.execute(
-        'insert into article values({serial_num}, {userID}, {article_num}, {post_time}, {content})'.format(
+        'insert into comment values({serial_num}, {userID}, {article_num}, {post_time}, {content})'.format(
             serial_num=serial_num,
             userID=userID,
             article_num=num,
@@ -93,8 +93,46 @@ def PostArticle(request):
             appl = cursor.fetchall()
             for i in appl:
                 send_json['name'].append(i[0])
+
         return JsonResponse(send_json)
     return render(request, 'add.html')
+
+def EditArticle(request, num):
+    if request.method == 'POST':
+        request = json.loads(request.body.decode('utf-8'))
+        if(request['action']=='ADD_ARTICLE'):
+            serial_num = num
+            stats = 'SUCCESS'
+            cursor = connection.cursor()
+            name = '\'{name}\''.format(name=request['class_name'])
+            title = '\'{title}\''.format(title=request['title'])
+            content = '\'{content}\''.format(content=request['content'])
+            cursor.execute(
+                'update article set class={name}, title={title}, content={content} where serial_num={serial_num}'.format(
+                    name=name,
+                    title=title,
+                    content=content,
+                    serial_num=num,
+                ))
+            send_json = {
+                'serial_num': serial_num,
+                'stats': stats,
+            }
+        elif(request['action']=='GET_CLASS_LIST'):
+            cursor = connection.cursor()
+            send_json = {
+                'name': [
+                ]
+            }
+            cursor.execute('select name from classification')
+            appl = cursor.fetchall()
+            for i in appl:
+                send_json['name'].append(i[0])
+        elif (request['action'] == 'GET_ARTICLE_DATA'):
+            print('aaaaaaaaa\n')
+            send_json = ArticleData(request, num)
+        return JsonResponse(send_json)
+    return render(request, 'edit.html')
 
 def article(request, num):
     if request.method == 'POST':
