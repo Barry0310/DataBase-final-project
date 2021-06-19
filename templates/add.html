@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+<meta content="text/html" charset="utf-8" />
+<style type="text/css" >
+div {
+	color: #ffffff;
+	background-color: #ff0000;
+	border-width: 1px;
+	border-color: black;
+	border-style: solid;
+	position: absolute;
+}
+</style>
+<title>T4 platform</title>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+</script>
+<script type="text/javascript" >
+document.createElement("topBar")
+</script>
+<style type="text/css" >
+topBar{
+    display: block;
+    background-color: cyan;
+    padding: 50px;
+    font-size: 50px;
+}
+</style> 
+</head>
+<body>
+<topBar>
+<a href="../../">首頁</a>
+</topBar>
+<form action="" method="post" >
+  <div align="left" style="background-color:cyan;padding:10px;margin-bottom:5px;">
+    <br>
+    <label for="class_name">分類:</label>
+    <input type="text" name="class_name" id="class_name" required autofocus />
+    <br>  
+    <br> 
+  <label for="article_title">文章標題:</label>
+    <input type="text" name="article_title" id="article_title" required autofocus />
+    <br>
+    <br>
+  <label for="article_content">文章內容:</label><br>
+    <textarea type="text" name="article_content" id="article_content" rows="10" cols="50" ></textarea>
+    <br>
+    <br>
+    <input type="button" value="新增" id="submit" />
+  </div>
+</form>
+</body>
+<script type="text/javascript" >
+window.onload = function() {
+
+  // 等用戶按下送出
+  let submit = document.getElementById('submit');
+  submit.addEventListener('click', signup); //監聽按鈕事件
+  // 送出
+  // 填入url -- TODO
+  let url = '';  // TODO
+  //-----------------------//
+  
+  function signup() {
+    // 更改輸入內容
+	let req = {}; // 建立JSON Object
+    req["action"] = "ADD_ARTICLE";
+    req["class_name"] = document.getElementById('class_name').value;
+	req["userID"] = "AAA"; // TODO
+	req["title"] = document.getElementById('article_title').value;
+	req["content"] = document.getElementById('article_content').value;
+    let data_a = JSON.stringify(req); // 將JSON轉為字串格式
+	// alert(data_a);
+	let xhr = new XMLHttpRequest(); // 建立xhr物件
+    xhr.open('post', url, true);
+    xhr.send(data_a);
+    xhr.onload = function() {
+    // 取得 xhr的回應後，顯示註冊是否成功資訊
+      let tmp = JSON.parse(xhr.responseText);
+    }
+	// alert(tmp);
+    if(tmp['stats'] == "SUCCESS") {
+      alert('新增成功');
+    }
+	else {
+      alert('新增失敗');
+    }
+  }
+}
+</script>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>T4 Platform - article list</title>
+		<script>
+			/*
+			var testData={
+					"name" : "Sport",
+					"disscusion" :  0,
+					"num_comment" :  0,
+					"last_article_time" : "2106190305",
+					"article" : [
+						{"serial_num" : 123, "title" : "dsads"},
+						{"serial_num" : 456, "title" : "cdsv"},
+						{"serial_num" : 789, "title" : "AAAAAA"}
+					]
+					
+				};
+				
+			function testFunc(input_data)
+			{
+				var name = input_data.name;
+				var disscusion = input_data.disscusion;
+				var num_comment = input_data.num_comment;
+				var last_article_time = input_data.last_article_time;
+				var tar = document.getElementById("class_name");
+				tar.innerHTML = name;
+				tar = document.getElementById("disscusion");
+				tar.innerHTML = disscusion;
+				tar = document.getElementById("num_comment");
+				tar.innerHTML = num_comment;
+				tar = document.getElementById("last_article_time");
+				tar.innerHTML = last_article_time;
+			}*/
+			function getData()
+			{
+				var req=new XMLHttpRequest();
+				req.open("post","");	<!--伺服器-->
+				req.onload = function()
+				{
+					var res = JSON.parse(this.response);
+					console.log(res);
+					//文章列表
+					var num_articles=res.article.length;
+					var tar = document.getElementById("article_list");
+					var data = "";
+					for(i=0;i<num_articles;++i)
+					{
+						data += "<a href=\"../../article/"+ res.article[i].serial_num +"\">"+res.article[i].title + "</a>" + "<p></p>"	<!--文章連結-->
+					}
+					tar.innerHTML = data;
+					//分類
+					var name = res.name;
+					var disscusion = res.disscusion;
+					var num_comment = res.num_comment;
+					var last_article_time = res.last_article_time;
+					tar = document.getElementById("class_name");
+					tar.innerHTML = name;
+					tar = document.getElementById("disscusion");
+					tar.innerHTML = disscusion;
+					tar = document.getElementById("num_comment");
+					tar.innerHTML = num_comment;
+					tar = document.getElementById("last_article_time");
+					tar.innerHTML = last_article_time;
+					
+				}
+				var reqArticleList={	
+					"action" : "GET_CLASS_DATA",
+					};
+				var myRequest = JSON.stringify(reqArticleList);
+				//alert(myRequest);
+				req.send(myRequest);
+			}
+
+			
+			
+			function goPost()
+			{
+				window.location.href="../../article/post/";
+			}
+			
+		</script>
+	</head>
+	<body>
+		<div id="top_bar" style="background-color: powderblue;">
+			<a style="color:blue; font-size:x-large;" 
+				id="logo" 
+				href="../../">
+				T4 Platform</a>
+			<p></p>
+			<a id="user_id" href="../../login/">尚未登入</a>
+		</div>
+		<p></p>
+		<div id="classification" style="background-color: powderblue;">
+			<h2 id="class_name">/*看板分類*/</h2>
+			<p id="class_info">文章數：<span id="disscusion"></span>   留言數：<span id="num_comment"></span>   最新文章時間：<span id="last_article_time"></span></p>
+			<!--<script>testFunc(testData);</script>-->
+			<button onclick="goPost();">我要發文</button>
+		</div>
+		<p></p>
+		<div id="article_list" style="background-color: powderblue;" > </div>
+        <script> getData();</script>
+	</body>
+</html>

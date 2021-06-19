@@ -1,0 +1,93 @@
+<!DOCTYPE html> 
+
+<html>  
+   <head> 
+      <meta charset = "utf-8"> 
+      <title>login</title> 
+      <style>
+         html {
+             height:100%; 
+         }
+         body {
+             font: 14px Arial,sans-serif; 
+             margin: 0px;
+             height: 100%;
+         }
+         .header {
+             padding: 30px 40px;
+             background: #acb3b9;
+             text-align: center;
+         }
+         .header h1 {
+         font-size: 24px;
+         }
+         .container {
+         width: 100%;
+         height: 100%;
+         background: #0a0a0a; 
+         }
+         .form {
+            background: rgb(250, 250, 250);
+            height: 250px;
+         }
+         .center {
+            background: #b8b6b6;
+            height: 550px;
+         }
+      </style>
+      <script type="text/javascript"> 
+
+      function Login(){ 
+         var done=0; 
+         var userID=document.login.userID.value;  
+         var password=document.login.password.value; 
+         var req = {};
+         req["action"] = "LOGIN";
+         req["userID"] = userID;
+         req["password"] = password;
+         let data = JSON.stringify(req);
+  
+         let xhr = new XMLHttpRequest(); 
+         xhr.open('post', "", true);
+         xhr.send(data); 
+         let res;
+         xhr.onload = function() {
+            res = JSON.parse(xhr.responseText); 
+            if (res["stats"]=="SUCCESS") { window.location="../"; done=1; } 
+            if (done==0) { alert("帳號或密碼錯誤時出現的訊息"); } 
+         }
+      } 
+      </script>
+   </head> 
+  
+   <body> 
+      <div class="container">
+         <div class="header">
+            <h1>T4 platform</h1>
+            <a href="../">首頁</a>
+         </div>
+         <center class='center'>
+            <form name="login">
+               <table border="1" cellpadding="5" style="width: 400px;" class=form>
+                  <tbody>
+                     <tr>
+                        <td colspan="2"><center>會員登入</center></td>
+                     </tr>
+                     <tr>
+                        <td width="70">帳號</td>
+                        <td width="194"><span style="font-family: Times New Roman; font-size: small;"><input name="userID" type="text" /></span></td>
+                     </tr>
+                     <tr>
+                        <td>密碼</td>
+                        <td><span style="font-family: Times New Roman; font-size: small;"><input name="password" type="password" /></span></td>
+                     </tr>
+                     <tr>
+                        <td align="center" colspan="2"><span style="font-family: Times New Roman; font-size: small;"><span style="white-space: normal;"><input onclick="Login()" type="button" value=" 登入 "/></span></span></td>
+                     </tr>
+                  </tbody>
+               </table>
+            </form>
+         </center>
+   </div>
+   </body> 
+</html> 

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>T4 Platform - article</title>
+		<script>
+			/*var test_data ={
+				"serial_num" :  123,
+				"class_name" : "Sport",
+				"userID" : "XKH",
+				"title" : "A",
+				"content" : "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBB",
+				"post_time" : "21/06/19-14:00",
+				"comment" : [
+					{"userID" : "abcde", "comment_time" : "1", "content" : "cascasc"},
+					{"userID" : "fghjk", "comment_time" : "2", "content" : "wowowowow",},
+				]
+			};*/
+			function getData()
+			{
+				var req=new XMLHttpRequest();
+				req.open("post","");	//伺服器
+				req.onload = function()
+				{
+					var res = JSON.parse(this.response);	//接回傳data
+					console.log(res);
+					//文章資訊
+					var tar = document.getElementById("article_title");
+					tar.innerHTML = res.title;
+					tar = document.getElementById("article_author");
+					tar.innerHTML = res.userID;
+					tar = document.getElementById("article_time");
+					tar.innerHTML = res.post_time;
+					tar = document.getElementById("article_content");
+					tar.innerHTML = res.content;
+					//留言部分
+					var num_comment = res.comment.length;
+					tar = document.getElementById("commets");
+					var data="";
+					for(i=0;i<num_comment;++i)
+					{
+						data += res.comment[i].userID + ": " + res.comment[i].content + "---" + res.comment[i].comment_time +"<br>";
+					}
+					tar.innerHTML = data;
+				}
+				var reqArticleData={	
+					"action" : "GET_ARTICLE_DATA",
+					};
+				var myRequest = JSON.stringify(reqArticleData);
+				req.send(myRequest);
+			}
+			
+			function Comment()
+			{
+				var req=new XMLHttpRequest();
+				req.open("post","");	//伺服器
+				req.onload = function()
+				{
+					var res = JSON.parse(this.response);	//接回傳data
+					console.log(res);
+					
+					if(res.stats== "SUCCESS") 
+					{
+						alert("成功!");
+					}
+					else 
+					{
+						alert("失敗!");
+					}
+				}
+				var reqAddComment={};	//request object
+				var cur_url = window.location.href;		//從當前網址抓取serial_num
+				var serial_num = "";
+				var arr = cur_url.split('/');
+				console.log(arr);
+				for(i=0;i<arr.length-1;++i)
+				{
+					if(arr[i]=="article")
+						serial_num = arr[i+1];
+				}
+				reqAddComment["action"] = "ADD_COMMENT";
+				reqAddComment["article_num"] = serial_num;
+				reqAddComment["userID"] = "";	//TODO
+				reqAddComment["content"] = document.getElementById("input_content").value;
+				var myRequest = JSON.stringify(reqAddComment);
+				req.send(myRequest);
+				
+				getData();
+			}
+		</script>
+	</head>
+	<body>
+		<div id="top_bar" style="background-color: powderblue;">
+			<a style="color:blue; font-size:x-large;" 
+				id="logo" 
+				href="../../../">	
+				T4 Platform</a>
+			<p></p>
+			<a id="user_id" href="../../../login">尚未登入</a>
+		</div>
+		<p></p>
+		<div id="title" style="background-color: powderblue;">
+			<p>標題：<span id="article_title"></span></p>
+			<p>作者：<span id="article_author"></span></p>
+			<p>發文時間：<span id="article_time"></span></p>
+		</div>
+		<p></p>
+		<div id="content_block" style="background-color: powderblue;">
+			<p id="article_content">內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文
+				內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文
+				內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文內文</p>
+		</div>
+		<p></p>
+		<textarea type="text" name="input_content" id="input_content" rows="5" cols="100" > </textarea>
+		<p></p>
+		<button onclick="Comment();">我要留言</button>
+		<p></p>
+		<div id="commets" style="background-color: powderblue;"> 留言*n</div>
+		<script>getData();</script>
+	</body>
+</html>
