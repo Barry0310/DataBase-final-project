@@ -1,0 +1,106 @@
+<!DOCTYPE html> 
+
+<html>  
+   <head> 
+      <meta charset = "utf-8"> 
+      <title>login</title> 
+      <style>
+         html {
+             height:100%; 
+         }
+         body {
+             font: 14px Arial,sans-serif; 
+             margin: 0px;
+             height: 100%;
+         }
+         .header {
+             padding: 30px 40px;
+             background: #acb3b9;
+             text-align: center;
+         }
+         .header h1 {
+         font-size: 24px;
+         }
+         .container {
+         width: 100%;
+         height: 100%;
+         background: #0a0a0a; 
+         }
+         .form {
+            background: rgb(250, 250, 250);
+            height: 250px;
+         }
+         .center {
+            background: #b8b6b6;
+            height: 550px;
+         }
+     </style>
+        <script type="text/javascript">
+            window.onload=function(){
+         var userID=localStorage.getItem("user_id")  
+         var req = {};
+         req["action"] = "GET_USER_DATA";
+         req["userID"] = userID;
+         let data = JSON.stringify(req);
+  
+         let xhr = new XMLHttpRequest(); 
+         xhr.open('post', "", true);
+         xhr.send(data); 
+         let res;
+         xhr.onload = function() {
+            res = JSON.parse(xhr.responseText); 
+            document.getElementById("userID").innerText= res["userID"];
+            document.getElementById("name").innerText= res["name"];
+            document.getElementById("gender").innerText= res["gender"];
+            document.getElementById("education").innerText= res["education"];
+            document.getElementById("create_time").innerText= res["create_time"];
+            document.getElementById("num_post").innerText= res["num_post"];
+         }
+            }
+        </script>
+   </head> 
+  
+   <body> 
+      <div class="container">
+         <div class="header">
+            <h1>T4 platform</h1>
+            <a href="../">首頁</a>
+         </div>
+         <center class='center'>
+            <form name="register">
+               <table border="1" cellpadding="5" style="width: 400px;" class=form>
+                  <tbody>
+                     <tr>
+                        <td colspan="2"><center>個人資訊</center></td>
+                     </tr>
+                     <tr>
+                        <td width="70">帳號</td>
+                        <td width="194" id="userID"></td>
+                     </tr>
+                     <tr>
+                        <td>名字</td>
+                        <td id="name"></td>
+                     </tr>
+                     <tr>
+                        <td>性別</td>
+                        <td id="gender"></td>
+                     </tr>
+                     <tr>
+                        <td>學校</td>
+                        <td id="education"></td>
+                     </tr>
+                     <tr>
+                        <td>建立時間</td>
+                        <td id="create_time"></td>
+                     </tr>
+                     <tr>
+                        <td>發文數</td>
+                        <td id="num_post"></td>
+                     </tr>
+                  </tbody>
+               </table>
+            </form>
+         </center>
+   </div>
+   </body> 
+</html> 

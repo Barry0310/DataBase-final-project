@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'register',
     'class',
     'article',
+    'user',
 ]
 
 MIDDLEWARE = [
