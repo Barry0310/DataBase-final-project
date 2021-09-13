@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql
+    volumes:
+      - C:\Users\barry\Desktop\my_sql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=0000
+
+  web:
+    image: myjango
+    ports:
+      - "80:8000"
+    depends_on:
+      - db

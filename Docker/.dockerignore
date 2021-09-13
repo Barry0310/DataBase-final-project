@@ -1,0 +1,4 @@
+venv/
+.idea/
+DockerFile_django
+docker-compose.yml
