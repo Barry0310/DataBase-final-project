@@ -20,11 +20,4 @@ docker-compose down
 ```
 can remove all env
 
-### issues
-
-Sometimes, the container of web will be ready earlier than db be , which will cause django can not connect with db.  
-When it happens, the web container should restart with this command.
-```
-docker restart databaseproject_web_1
-```
 

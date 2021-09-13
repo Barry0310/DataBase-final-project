@@ -7,10 +7,23 @@ services:
       - C:\Users\barry\Desktop\my_sql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=0000
+    healthcheck:
+      test: mysqladmin ping -h localhost -p0000
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: on-failure
 
   web:
     image: myjango
     ports:
       - "80:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: curl -f localhost:8000
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: on-failure
