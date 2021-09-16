@@ -1,0 +1,8 @@
+FROM mysql
+
+ENV MYSQL_ROOT_PASSWORD=0000 \
+    MYSQL_DATABASE=DBproject
+
+ADD /DataBaseDDL/* /docker-entrypoint-initdb.d
+
+EXPOSE 3306

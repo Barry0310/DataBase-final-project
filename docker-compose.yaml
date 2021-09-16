@@ -2,11 +2,9 @@ version: "3.9"
 
 services:
   db:
-    image: mysql
+    image: my_mysql
     volumes:
-      - C:\Users\barry\Desktop\my_sql:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=0000
+      - db_vol:/var/lib/mysql
     healthcheck:
       test: mysqladmin ping -h localhost -p0000
       interval: 10s
@@ -15,7 +13,7 @@ services:
     restart: on-failure
 
   web:
-    image: myjango
+    image: my_django
     ports:
       - "80:8000"
     depends_on:
@@ -23,7 +21,10 @@ services:
         condition: service_healthy
     healthcheck:
       test: curl -f localhost:8000
-      interval: 10s
+      interval: 5m
       timeout: 5s
       retries: 3
     restart: on-failure
+
+volumes:
+  db_vol:
