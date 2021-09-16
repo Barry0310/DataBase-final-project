@@ -6,10 +6,18 @@ NTNU Database Final Project
 implement by django and mysql  
 environment: docker
 
+### create image
+create images of mysql and django
+* mysql
+```
+docker build -t my_mysql -f DockerFile_mysql .
+```
+* django
+```
+docker build -t my_django -f DockerFile_django .
+```
+
 ### start server
-Copy files in Docker to DataBaseProject and cd DataBaseProject.  
-In docker-compose.yml the volumes of db should use yours  
-then
 ```
 docker-compose up
 ```
@@ -18,6 +26,10 @@ use files in DataBaseDDL set up db container
 ```
 docker-compose down
 ```
-can remove all env
+can remove containers and network
+```
+docker volume rm databaseproject_db_vol
+```
+remove the volume of db
 
 
